@@ -2,12 +2,14 @@ import { Request, Response } from "express";
 import { CreateScheduleService } from "../../schedules/domain/services/CreateScheduleService";
 import { FindByIdScheduleService } from "../../schedules/domain/services/FindByIdScheduleService";
 import { FindAllScheduleService } from "../../schedules/domain/services/FindAllScheduleService";
+import { UpdateScheduleService } from "../../schedules/domain/services/UpdateScheduleService";
 
 export class ScheduleController {
   constructor(
     private readonly findByIdScheduleService: FindByIdScheduleService,
     private readonly createScheduleService: CreateScheduleService,
-    private readonly findAllScheduleService: FindAllScheduleService
+    private readonly findAllScheduleService: FindAllScheduleService,
+    private readonly updateScheduleService: UpdateScheduleService
   ) { }
 
   async findAll(req: Request, res: Response) {
@@ -52,6 +54,24 @@ export class ScheduleController {
     } catch (error) {
       if (error instanceof Error) {
         return res.status(500).send({ message: error.message, success: false });
+      }
+      return res.status(500).send({ message: 'Unknown error', success: false });
+    }
+  }
+
+  async update(req: Request, res: Response) {
+    const { name, hour, dayOfMonth, month, dayOfWeek } = req.body;
+    const { id } = req.params;
+    try {
+      if (!id || !name || !hour) return res.status(401).send({ message: 'ID, Name or Hour required!', success: false })
+      await this.updateScheduleService.execute({ 
+        id: +id,
+        updateScheduleInterface: { name, hour, dayOfMonth, month, dayOfWeek }
+      });
+      return res.status(201).send({ message: 'Update schedule successfully', success: true });
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(401).send({ message: error?.stack, success: false });
       }
       return res.status(500).send({ message: 'Unknown error', success: false });
     }

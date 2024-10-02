@@ -4,6 +4,7 @@ import { FindByIdScheduleService } from "../../schedules/domain/services/FindByI
 import { CreateScheduleService } from "../../schedules/domain/services/CreateScheduleService";
 import { ScheduleController } from "../controllers/ScheduleController";
 import { FindAllScheduleService } from "../../schedules/domain/services/FindAllScheduleService";
+import { UpdateScheduleService } from "../../schedules/domain/services/UpdateScheduleService";
 
 const router = Router();
 
@@ -11,10 +12,12 @@ const prismaScheduleRepository = new PrismaScheduleRepository();
 const findAllScheduleService = new FindAllScheduleService(prismaScheduleRepository);
 const findByIdScheduleService = new FindByIdScheduleService(prismaScheduleRepository);
 const createScheduleService = new CreateScheduleService(prismaScheduleRepository);
+const updateScheduleService = new UpdateScheduleService(prismaScheduleRepository);
 const scheduleController = new ScheduleController(
   findByIdScheduleService,
   createScheduleService,
-  findAllScheduleService
+  findAllScheduleService,
+  updateScheduleService
 );
 
 router.get('/', async (req, res, next) => {
@@ -40,5 +43,13 @@ router.post('/', async (req, res, next) => {
     next(error);
   }
 });
+
+router.put('/:id', async (req, res, next) => {
+  try {
+    await scheduleController.update(req, res);
+  } catch (error) {
+    next(error);
+  }
+})
 
 export default router;
