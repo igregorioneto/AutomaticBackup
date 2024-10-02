@@ -1,12 +1,11 @@
 import express, { Request, Response } from "express";
-import { PrismaScheduleRepository } from "./schedules/infra/repositories/PrismaScheduleRepository";
-import { FindByIdScheduleService } from "./schedules/domain/services/FindByIdScheduleService";
-import { CreateScheduleService } from "./schedules/domain/services/CreateScheduleService";
-import { ScheduleController } from "./app/controllers/ScheduleController";
+import cors from "cors";
 import scheduleRoutes from "./app/routes/scheduleRoutes";
 
 const app = express();
 const port = 3000;
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
