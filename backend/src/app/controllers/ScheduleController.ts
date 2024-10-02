@@ -1,12 +1,26 @@
 import { Request, Response } from "express";
 import { CreateScheduleService } from "../../schedules/domain/services/CreateScheduleService";
 import { FindByIdScheduleService } from "../../schedules/domain/services/FindByIdScheduleService";
+import { FindAllScheduleService } from "../../schedules/domain/services/FindAllScheduleService";
 
 export class ScheduleController {
   constructor(
     private readonly findByIdScheduleService: FindByIdScheduleService,
-    private readonly createScheduleService: CreateScheduleService
+    private readonly createScheduleService: CreateScheduleService,
+    private readonly findAllScheduleService: FindAllScheduleService
   ) { }
+
+  async findAll(req: Request, res: Response) {
+    try {
+      const result = await this.findAllScheduleService.execute();
+      return res.status(200).send({ message: 'Find all schedule', data: result, success: true })
+    } catch (error) {
+      if (error instanceof Error) {
+        return res.status(500).send({ message: error.name, success: false });
+      }
+      return res.status(500).send({ message: 'Unknown error', success: false });
+    }
+  }
 
   async findById(req: Request, res: Response) {
     const { id } = req.params;
