@@ -22,14 +22,15 @@ model Backups {
   id          Int     @id   @default(autoincrement())
   name        String
   type        String
-  status      StatusBackups
+  status      StatusBackupsEnum
   config      Json
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
 
-enum StatusBackups {
+enum StatusBackupsEnum {
   EXECUTING
   FINISHED
   FAILED
+  INITIALIZED
 }

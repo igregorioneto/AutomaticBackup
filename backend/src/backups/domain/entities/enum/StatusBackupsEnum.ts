@@ -1,0 +1,6 @@
+export enum StatusBackupsEnum {
+  EXECUTING = "EXECUTING",
+  FINISHED = "FINISHED",
+  FAILED = "FAILED",
+  INITIALIZED = "INITIALIZED"
+}
