@@ -26,7 +26,7 @@ export class CreateScheduleService {
     await this.scheduleRepository.create(schedule);
 
     const [hourCron, minuteCron] = hour.split(':');
-    const cronExpression = `1 ${minuteCron} ${hourCron} ${dayOfMonth} ${month} ${dayOfWeek}`;
+    const cronExpression = `1 ${minuteCron} ${hourCron} ${dayOfMonth ?? '*'} ${month ?? '*'} ${dayOfWeek ?? '*'}`;
 
     if (this.jobs.has(name)) {
       console.log(`A tarefa ${name} já está agendada`);
